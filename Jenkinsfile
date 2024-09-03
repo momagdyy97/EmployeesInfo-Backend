@@ -3,6 +3,7 @@ pipeline {
     environment {
         BACKEND_REPO = 'https://github.com/momagdyy97/Essam-Zomool-Backend.git'
         FRONTEND_REPO = 'https://github.com/momagdyy97/Zomool-Admin-Panel-Essam.git'
+        DOCKERHUB_CREDENTIALS = 'dockerhub-credentials' // Add your Docker Hub credentials ID here
     }
     stages {
         stage('Checkout Backend') {
@@ -25,27 +26,49 @@ pipeline {
                 }
             }
         }
-        stage('Build Backend') {
+        stage('Build Backend Docker Image') {
             steps {
-                // Add your backend build commands here, e.g.:
-                sh 'npm install'
-                sh 'npm run build'
-            }
-        }
-        stage('Build Frontend') {
-            steps {
-                dir('frontend') { 
-                    // Add your frontend build commands here, e.g.:
-                    sh 'npm install'
-                    sh 'npm run build'
+                script {
+                    sh 'docker build -t momousa1997/mern-backend ./'
                 }
             }
         }
-        stage('Deploy') {
+        stage('Build Frontend Docker Image') {
             steps {
-                // Add deployment steps here for both backend and frontend
-                echo 'Deploying Backend and Frontend...'
+                dir('frontend') {
+                    script {
+                        sh 'docker build -t momousa1997/mern-frontend ./'
+                    }
+                }
+            }
+        }
+        stage('Push Docker Images') {
+            steps {
+                script {
+                    docker.withRegistry('https://registry.hub.docker.com', env.DOCKERHUB_CREDENTIALS) {
+                        sh 'docker push momousa1997/mern-backend'
+                        sh 'docker push momousa1997/mern-frontend'
+                    }
+                }
+            }
+        }
+        stage('Deploy with Docker Compose') {
+            steps {
+                script {
+                    // Stop and remove any existing containers
+                    sh 'docker-compose down || true'
+                    
+                    // Start the services using Docker Compose
+                    sh 'docker-compose up -d'
+                }
             }
         }
     }
+    post {
+        always {
+            // Cleanup any dangling images to save space
+            sh 'docker image prune -f'
+        }
+    }
 }
+
