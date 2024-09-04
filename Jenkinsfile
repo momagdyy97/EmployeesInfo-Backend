@@ -60,6 +60,19 @@ pipeline {
             }
         }
 
+        stage('Stop and Remove Docker Containers') {
+            steps {
+                withCredentials([sshUserPrivateKey(credentialsId: 'ansible-ssh-key', keyFileVariable: 'SSH_KEY', usernameVariable: 'EC2_USER')]) {
+                    script {
+                        sh '''
+                        ssh -o StrictHostKeyChecking=no -i ${SSH_KEY} ${EC2_USER}@${EC2_HOST} \
+                        "docker ps -q | xargs -r docker stop && docker ps -aq | xargs -r docker rm"
+                        '''
+                    }
+                }
+            }
+        }
+
         stage('Start Docker Containers') {
             steps {
                 withCredentials([sshUserPrivateKey(credentialsId: 'ansible-ssh-key', keyFileVariable: 'SSH_KEY', usernameVariable: 'EC2_USER')]) {
@@ -102,5 +115,5 @@ pipeline {
                 '''
             }
         }
-    }
+    } 
 }
