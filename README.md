@@ -1,12 +1,11 @@
 # EmployeesInfo Backend
 
 ## Overview
+
 EmployeesInfo is the backend service for the EmployeesInfo application. It is built using Node.js, Express, and MongoDB.
 
 ## Features
 
-- User authentication and authorization
-  
 - CRUD operations for managing data
   
 - Integration with third-party APIs
@@ -22,6 +21,7 @@ EmployeesInfo is the backend service for the EmployeesInfo application. It is bu
 - MongoDB
 
 ### Steps
+
 1. **Clone the repository:**
    
    git clone https://github.com/momagdyy97/Essam-Zomool-Backend.git
