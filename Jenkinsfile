@@ -7,6 +7,9 @@ pipeline {
         GIT_REPO_FRONTEND = 'https://github.com/momagdyy97/Zomool-Admin-Panel-Essam.git'
         DOCKER_IMAGE_BACKEND = 'momousa1997/mern-backend'
         DOCKER_IMAGE_FRONTEND = 'momousa1997/mern-frontend'
+        EC2_SSH_CREDENTIALS = credentials('ansible-ssh-key') // Jenkins credentials for SSH access to EC2
+        EC2_USER = 'ubuntu' // Username for SSH access
+        EC2_HOST = '3.29.24.171' // EC2 instance IP
     }
 
     stages {
@@ -43,11 +46,12 @@ pipeline {
 
         stage('Deploy Using Ansible') {
             steps {
-                ansiblePlaybook(
-                    playbook: 'deploy.yml',
-                    inventory: 'hosts.ini',
-                    credentialsId: 'ansible-ssh-key'
-                )
+                script {
+                    // Use SSH to run the Ansible playbook on EC2 instance
+                    sh """
+                    sshpass -e ssh -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} 'ansible-playbook /var/www/html/deploy.yml -i /var/www/html/hosts.ini -u ${EC2_USER} -k'
+                    """
+                }
             }
         }
     }
