@@ -48,7 +48,7 @@ pipeline {
                     script {
                         sh '''
                         ssh -o StrictHostKeyChecking=no -i ${SSH_KEY} ${EC2_USER}@${EC2_HOST} \
-                        "ansible-playbook /var/www/html/deploy.yml -i /var/www/html/hosts.ini -u ${EC2_USER} -k -vvvv > ansible.log 2>&1 || echo 'Ansible playbook failed' > ansible.log"
+                        "ansible-playbook /var/www/html/deploy.yml -i /var/www/html/hosts.ini -u ${EC2_USER} -k -vvvv > ansible.log 2>&1"
                         '''
                     }
                 }
@@ -61,7 +61,7 @@ pipeline {
                     script {
                         sh '''
                         ssh -o StrictHostKeyChecking=no -i ${SSH_KEY} ${EC2_USER}@${EC2_HOST} \
-                        "cd /var/www/html && docker-compose up -d > docker-compose.log 2>&1 || echo 'Docker Compose failed' > docker-compose.log"
+                        "cd /var/www/html && docker-compose up -d > docker-compose.log 2>&1"
                         '''
                     }
                 }
@@ -78,11 +78,14 @@ pipeline {
                 echo 'CI/CD Pipeline failed.'
                 sh '''
                 if [ -f ansible.log ]; then
+                    echo "Ansible Log:"
                     cat ansible.log
                 else
                     echo "ansible.log file not found."
                 fi
+
                 if [ -f docker-compose.log ]; then
+                    echo "Docker Compose Log:"
                     cat docker-compose.log
                 else
                     echo "docker-compose.log file not found."
