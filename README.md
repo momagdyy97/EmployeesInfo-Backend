@@ -1,8 +1,8 @@
-# Essam-Zomool-Backend
+# EmployeesInfo-Backend
 
 ## Overview
 
-- Essam-Zomool-Backend is the backend service for the Zomool Admin Panel, built using Node.js, MongoDB and Express.js. This service provides RESTful APIs for managing and processing application data. It is Dockerized for easy deployment and integration into CI/CD pipelines.
+- EmployeesInfo-Backend is the backend service for theEmployeesInfo-Frontend, built using Node.js, MongoDB and Express.js. This service provides RESTful APIs for managing and processing application data. It is Dockerized for easy deployment and integration into CI/CD pipelines.
 
 ## Features
 
@@ -18,9 +18,9 @@
 
 ### 1. Clone the repository
 
-- git clone https://github.com/momagdyy97/Essam-Zomool-Backend.git
+- git clone https://github.com/momagdyy97/EmployeesInfo-Backend.git
   
-- cd Essam-Zomool-Backend
+- cd EmployeesInfo-Backend
   
 ### 2. Install dependencies
    
