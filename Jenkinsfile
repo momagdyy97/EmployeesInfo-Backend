@@ -3,7 +3,7 @@ pipeline {
     environment {
         BACKEND_REPO = 'https://github.com/momagdyy97/Essam-Zomool-Backend.git'
         FRONTEND_REPO = 'https://github.com/momagdyy97/Zomool-Admin-Panel-Essam.git'
-        DOCKERHUB_CREDENTIALS = 'dockerhub-credentials' // Add your Docker Hub credentials ID here
+        DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials')
     }
     stages {
         stage('Checkout Backend') {
@@ -29,7 +29,7 @@ pipeline {
         stage('Build Backend Docker Image') {
             steps {
                 script {
-                    sh 'docker build -t momousa1997/mern-backend ./'
+                    sh 'docker build -t momousa1997/mern-backend:latest .'
                 }
             }
         }
@@ -37,8 +37,15 @@ pipeline {
             steps {
                 dir('frontend') {
                     script {
-                        sh 'docker build -t momousa1997/mern-frontend ./'
+                        sh 'docker build -t momousa1997/mern-frontend:latest .'
                     }
+                }
+            }
+        }
+        stage('Login') {
+            steps {
+                script {
+                    sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
                 }
             }
         }
@@ -46,8 +53,8 @@ pipeline {
             steps {
                 script {
                     docker.withRegistry('https://registry.hub.docker.com', env.DOCKERHUB_CREDENTIALS) {
-                        sh 'docker push momousa1997/mern-backend'
-                        sh 'docker push momousa1997/mern-frontend'
+                        sh 'docker push momousa1997/mern-backend:latest'
+                        sh 'docker push momousa1997/mern-frontend:latest'
                     }
                 }
             }
@@ -68,7 +75,7 @@ pipeline {
         always {
             // Cleanup any dangling images to save space
             sh 'docker image prune -f'
+            sh 'docker logout'
         }
     }
 }
-
