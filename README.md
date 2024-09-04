@@ -16,16 +16,6 @@
   
 - Integrated with CI/CD pipelines.
 
-## Prerequisites
-
-- Node.js (v14.x or higher)
-  
-- MongoDB
-  
-- Docker (optional, for containerization)
-  
-- Git
-
 ## Setup
 
 ### 1. Clone the repository
