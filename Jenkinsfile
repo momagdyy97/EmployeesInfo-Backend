@@ -3,8 +3,8 @@ pipeline {
 
     environment {
         DOCKER_HUB_CREDENTIALS = credentials('dockerhub-credentials')
-        GIT_REPO_BACKEND = 'https://github.com/momagdyy97/Essam-Zomool-Backend.git'
-        GIT_REPO_FRONTEND = 'https://github.com/momagdyy97/Zomool-Admin-Panel-Essam.git'
+        GIT_REPO_BACKEND = 'https://github.com/momagdyy97/EmployeesInfo-Backend.git'
+        GIT_REPO_FRONTEND = 'https://github.com/momagdyy97/EmployeesInfo-Frontend.git'
         DOCKER_IMAGE_BACKEND = 'momousa1997/mern-backend'
         DOCKER_IMAGE_FRONTEND = 'momousa1997/mern-frontend'
         EC2_HOST = '3.29.24.171' // EC2 instance IP
