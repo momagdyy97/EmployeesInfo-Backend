@@ -1,35 +1,69 @@
-# EmployeesInfo BackEnd
+# Essam-Zomool-Backend
 
 ## Overview
 
-- EmployeesInfo is the backend service for the EmployeesInfo application. It is built using Node.js, Express.js and MongoDB.
+- Essam-Zomool-Backend is the backend service for the Zomool Admin Panel, built using Node.js and Express. This service provides RESTful APIs for managing and processing application data. It is Dockerized for easy deployment and integration into CI/CD pipelines.
 
-### Steps
+## Features
 
-1. **Clone the repository:**
-   
+- RESTful API endpoints for CRUD operations.
+  
+- Authentication and authorization using JWT.
+  
+- Database integration with MongoDB.
+  
+- Dockerized setup for containerized deployment.
+  
+- Integrated with CI/CD pipelines.
+
+## Prerequisites
+
+- Node.js (v14.x or higher)
+  
+- MongoDB
+  
+- Docker (optional, for containerization)
+  
+- Git
+
+## Setup
+
+### 1. Clone the repository
+
 - git clone https://github.com/momagdyy97/Essam-Zomool-Backend.git
-   
+  
 - cd Essam-Zomool-Backend
+  
+### 2. Install dependencies
+   
+- npm install
 
-3. **Install dependencies:**
+### 3. Environment Variables
 
-npm install
-
-3. **Set up environment variables: Create a .env file in the root directory and add the following variables:**
-
-- MONGO_URI=your_mongodb_uri
-
-- JWT_SECRET=your_jwt_secret
+Create a .env file in the root directory and add the following:
 
 - PORT=3001
+  
+- MONGODB_URI=<your-mongodb-uri>
 
-4. **Start the server:**
+- JWT_SECRET=<your-secret-key>
 
+### 4. Run the application
+   
 - npm start
 
-**Usage**
+- The backend service should now be running on http://localhost:3001.
 
-- Access the API at http://localhost:3001/api
+### 5. Docker Setup
+1. Build the Docker image
+   
+docker build -t <your-docker-username>/essam-zomool-backend .
 
-- Use Postman or any other API client to interact with the endpoints
+2. Run the Docker container
+   
+- docker run -d -p 3001:3001 --name <your-docker-username>/essam-zomool-backend
+- The backend service will be available on http://localhost:3000 inside the container.
+
+### Testing
+
+- npm test
