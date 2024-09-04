@@ -3,7 +3,6 @@ pipeline {
     environment {
         BACKEND_REPO = 'https://github.com/momagdyy97/Essam-Zomool-Backend.git'
         FRONTEND_REPO = 'https://github.com/momagdyy97/Zomool-Admin-Panel-Essam.git'
-        DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials')
     }
     stages {
         stage('Checkout Backend') {
@@ -54,7 +53,7 @@ pipeline {
         stage('Push Docker Images') {
             steps {
                 script {
-                    docker.withRegistry('https://registry.hub.docker.com', env.DOCKERHUB_CREDENTIALS) {
+                    withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'DOCKERHUB_USER', passwordVariable: 'DOCKERHUB_PASS')]) {
                         sh 'docker push momousa1997/mern-backend:latest'
                         sh 'docker push momousa1997/mern-frontend:latest'
                     }
