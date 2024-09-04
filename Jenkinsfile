@@ -50,7 +50,8 @@ pipeline {
                 script {
                     // Use SSH to run the Ansible playbook on EC2 instance with verbose output
                     sh """
-                    sshpass -e ssh -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} 'ansible-playbook /var/www/html/deploy.yml -i /var/www/html/hosts.ini -u ${EC2_USER} -k -vvv'
+                    sshpass -e ssh -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} 'ansible-playbook /var/www/html/deploy.yml -i /var/www/html/hosts.ini -u ${EC2_USER} -k -vvv > ansible.log 2>&1'
+                    cat ansible.log
                     """
                 }
             }
