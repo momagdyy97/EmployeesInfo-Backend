@@ -1,8 +1,8 @@
-# EmployeesInfo FrontEnd
+# EmployeesInfo BackEnd
 
 ## Overview
 
-EmployeesInfo is the frontend service for the EmployeesInfo application. It is built using Node.js, React.js.
+EmployeesInfo is the frontend service for the EmployeesInfo application. It is built using Node.js, Express.js and MongoDB.
 
 ## Installation
 
