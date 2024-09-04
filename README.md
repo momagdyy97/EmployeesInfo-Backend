@@ -2,7 +2,7 @@
 
 ## Overview
 
-- Essam-Zomool-Backend is the backend service for the Zomool Admin Panel, built using Node.js and Express. This service provides RESTful APIs for managing and processing application data. It is Dockerized for easy deployment and integration into CI/CD pipelines.
+- Essam-Zomool-Backend is the backend service for the Zomool Admin Panel, built using Node.js, MongoDB and Express.js. This service provides RESTful APIs for managing and processing application data. It is Dockerized for easy deployment and integration into CI/CD pipelines.
 
 ## Features
 
@@ -62,7 +62,8 @@ docker build -t <your-docker-username>/essam-zomool-backend .
 2. Run the Docker container
    
 - docker run -d -p 3001:3001 --name <your-docker-username>/essam-zomool-backend
-- The backend service will be available on http://localhost:3000 inside the container.
+  
+- The backend service will be available on http://localhost:3001 inside the container.
 
 ### Testing
 
