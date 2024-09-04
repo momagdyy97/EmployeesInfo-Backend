@@ -10,6 +10,7 @@ pipeline {
         EC2_SSH_CREDENTIALS = credentials('ansible-ssh-key') // Jenkins credentials for SSH access to EC2
         EC2_USER = 'ubuntu' // Username for SSH access
         EC2_HOST = '3.29.24.171' // EC2 instance IP
+        SSHPASS = credentials('6d035460-0417-4c69-9cab-c283b403ba78') // Updated with the credential ID
     }
 
     stages {
