@@ -35,8 +35,8 @@ pipeline {
             steps {
                 script {
                     docker.withRegistry('https://registry.hub.docker.com', 'dockerhub-credentials') {
-                        docker.image("${DOCKER_IMAGE_BACKEND}:latest").push()
-                        docker.image("${DOCKER_IMAGE_FRONTEND}:latest").push()
+                        docker.image("${DOCKER_IMAGE_BACKEND}").push()
+                        docker.image("${DOCKER_IMAGE_FRONTEND}").push()
                     }
                 }
             }
