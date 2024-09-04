@@ -20,7 +20,7 @@
 
 - git clone https://github.com/momagdyy97/EmployeesInfo-Backend.git
   
-- cd EmployeesInfo-Backend
+- cd Essam-Zomool-Backend
   
 ### 2. Install dependencies
    
