@@ -2,7 +2,7 @@
 
 ## Overview
 
-- EmployeesInfo-Backend is the backend service for theEmployeesInfo-Frontend, built using Node.js, MongoDB and Express.js. This service provides RESTful APIs for managing and processing application data. It is Dockerized for easy deployment and integration into CI/CD pipelines.
+- EmployeesInfo-Backend is the backend service for the EmployeesInfo-Frontend, built using Node.js, MongoDB and Express.js. This service provides RESTful APIs for managing and processing application data. It is Dockerized for easy deployment and integration into CI/CD pipelines.
 
 ## Features
 
