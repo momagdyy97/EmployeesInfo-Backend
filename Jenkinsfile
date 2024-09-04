@@ -10,7 +10,6 @@ pipeline {
         EC2_SSH_CREDENTIALS = credentials('ansible-ssh-key') // Jenkins credentials for SSH access to EC2
         EC2_USER = 'ubuntu' // Username for SSH access
         EC2_HOST = '3.29.24.171' // EC2 instance IP
-        SSHPASS = credentials('6d035460-0417-4c69-9cab-c283b403ba78') // Updated with the credential ID
     }
 
     stages {
@@ -50,7 +49,7 @@ pipeline {
                 script {
                     // Use SSH to run the Ansible playbook on EC2 instance with verbose output
                     sh """
-                    sshpass -e ssh -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} 'ansible-playbook /var/www/html/deploy.yml -i /var/www/html/hosts.ini -u ${EC2_USER} -k -vvv > ansible.log 2>&1'
+                    ssh -o StrictHostKeyChecking=no -i ${EC2_SSH_CREDENTIALS} ${EC2_USER}@${EC2_HOST} 'ansible-playbook /var/www/html/deploy.yml -i /var/www/html/hosts.ini -u ${EC2_USER} -k -vvv > ansible.log 2>&1'
                     cat ansible.log
                     """
                 }
