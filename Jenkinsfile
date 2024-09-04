@@ -66,7 +66,7 @@ pipeline {
                     script {
                         sh '''
                         ssh -o StrictHostKeyChecking=no -i ${SSH_KEY} ${EC2_USER}@${EC2_HOST} \
-                        "cd /path/to/docker-compose-directory && docker-compose up -d > docker-compose.log 2>&1; \
+                        "cd /var/www/html && docker-compose up -d > docker-compose.log 2>&1; \
                         if [ -f docker-compose.log ]; then \
                             tail -n 50 docker-compose.log; \
                         else \
