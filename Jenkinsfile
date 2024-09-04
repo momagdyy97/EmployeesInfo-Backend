@@ -44,10 +44,10 @@ pipeline {
 
         stage('Deploy Using Ansible') {
             steps {
-                withCredentials([file(credentialsId: 'ansible-ssh-key', variable: 'SSH_KEY')]) {
+                withCredentials([sshUserPrivateKey(credentialsId: 'ansible-ssh-key', keyFileVariable: 'SSH_KEY', usernameVariable: 'EC2_USER')]) {
                     script {
                         sh """
-                        ssh -o StrictHostKeyChecking=no -i ${SSH_KEY} ubuntu@${EC2_HOST} 'ansible-playbook /var/www/html/deploy.yml -i /var/www/html/hosts.ini -u ubuntu -k -vvv > ansible.log 2>&1'
+                        ssh -o StrictHostKeyChecking=no -i ${SSH_KEY} ${EC2_USER}@${EC2_HOST} 'ansible-playbook /var/www/html/deploy.yml -i /var/www/html/hosts.ini -u ${EC2_USER} -k -vvv > ansible.log 2>&1'
                         cat ansible.log
                         """
                     }
