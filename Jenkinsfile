@@ -1,82 +1,63 @@
 pipeline {
     agent any
+
     environment {
-        BACKEND_REPO = 'https://github.com/momagdyy97/Essam-Zomool-Backend.git'
-        FRONTEND_REPO = 'https://github.com/momagdyy97/Zomool-Admin-Panel-Essam.git'
+        DOCKER_HUB_CREDENTIALS = credentials('dockerhub-credentials')
+        GIT_REPO_BACKEND = 'https://github.com/momagdyy97/Essam-Zomool-Backend.git'
+        GIT_REPO_FRONTEND = 'https://github.com/momagdyy97/Zomool-Admin-Panel-Essam.git'
+        DOCKER_IMAGE_BACKEND = 'momousa1997/mern-backend'
+        DOCKER_IMAGE_FRONTEND = 'momousa1997/mern-frontend'
     }
+
     stages {
-        stage('Checkout Backend') {
+        stage('Clone Repositories') {
             steps {
-                checkout([
-                    $class: 'GitSCM',
-                    branches: [[name: '*/main']],
-                    userRemoteConfigs: [[url: env.BACKEND_REPO]]
-                ])
-            }
-        }
-        stage('Checkout Frontend') {
-            steps {
-                dir('frontend') { // Create a subdirectory for the frontend repo
-                    checkout([
-                        $class: 'GitSCM',
-                        branches: [[name: '*/main']],
-                        userRemoteConfigs: [[url: env.FRONTEND_REPO]]
-                    ])
+                dir('backend') {
+                    git branch: 'main', url: "${env.GIT_REPO_BACKEND}"
                 }
-            }
-        }
-        stage('Build Backend Docker Image') {
-            steps {
-                script {
-                    sh 'docker build -t momousa1997/mern-backend:latest .'
-                }
-            }
-        }
-        stage('Build Frontend Docker Image') {
-            steps {
                 dir('frontend') {
-                    script {
-                        sh 'docker build -t momousa1997/mern-frontend:latest .'
-                    }
+                    git branch: 'main', url: "${env.GIT_REPO_FRONTEND}"
                 }
             }
         }
-        stage('Login') {
+
+        stage('Build Docker Images') {
             steps {
                 script {
-                    withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'DOCKERHUB_USER', passwordVariable: 'DOCKERHUB_PASS')]) {
-                        sh 'echo $DOCKERHUB_PASS | docker login -u $DOCKERHUB_USER --password-stdin'
-                    }
+                    docker.build("${DOCKER_IMAGE_BACKEND}", './backend')
+                    docker.build("${DOCKER_IMAGE_FRONTEND}", './frontend')
                 }
             }
         }
+
         stage('Push Docker Images') {
             steps {
                 script {
-                    withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'DOCKERHUB_USER', passwordVariable: 'DOCKERHUB_PASS')]) {
-                        sh 'docker push momousa1997/mern-backend:latest'
-                        sh 'docker push momousa1997/mern-frontend:latest'
+                    docker.withRegistry('https://registry.hub.docker.com', 'dockerhub-credentials') {
+                        docker.image("${DOCKER_IMAGE_BACKEND}:latest").push()
+                        docker.image("${DOCKER_IMAGE_FRONTEND}:latest").push()
                     }
                 }
             }
         }
-        stage('Deploy with Docker Compose') {
+
+        stage('Deploy Using Ansible') {
             steps {
-                script {
-                    // Stop and remove any existing containers
-                    sh 'cd /var/www/html && docker-compose down || true'
-                    
-                    // Start the services using Docker Compose
-                    sh 'cd /var/www/html && docker-compose up -d'
-                }
+                ansiblePlaybook(
+                    playbook: 'deploy.yml',
+                    inventory: 'hosts.ini',
+                    credentialsId: 'ansible-ssh-key'
+                )
             }
         }
     }
+
     post {
-        always {
-            // Cleanup any dangling images to save space
-            sh 'docker image prune -f'
-            sh 'docker logout'
+        success {
+            echo 'CI/CD Pipeline completed successfully!'
+        }
+        failure {
+            echo 'CI/CD Pipeline failed.'
         }
     }
 }
