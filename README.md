@@ -1,21 +1,20 @@
-# Essam-Zomool-Backend
-
-## Overview
+Essam-Zomool-Backend
+Overview
 Essam-Zomool-Backend is the backend service for the Zomool application. It is built using Node.js, Express, and MongoDB.
 
-## Features
+Features
 - User authentication and authorization
 - CRUD operations for managing data
 - Integration with third-party APIs
 - Real-time data updates using WebSockets
 
-## Installation
+Installation
 
-### Prerequisites
+Prerequisites
 - Node.js (v14 or higher)
 - MongoDB
 
-### Steps
+Steps
 1. **Clone the repository:**
    ```bash
    git clone https://github.com/momagdyy97/Essam-Zomool-Backend.git
