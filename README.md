@@ -50,7 +50,7 @@ docker build -t **your-docker-hub-username**/essam-zomool-backend .
 
 2. Run the Docker container
    
-- docker run -d -p 3001:3001 --name **your-docker-hub-username**/essam-zomool-backend
+- docker run -d -p 3001:3001 **your-docker-hub-username**/essam-zomool-backend
   
 - The backend service will be available on http://localhost:3001 inside the container.
 
