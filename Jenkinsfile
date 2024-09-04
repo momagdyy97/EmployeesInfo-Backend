@@ -55,13 +55,13 @@ pipeline {
             }
         }
 
-        stage('Run Container') {
+        stage('Start Docker Containers') {
             steps {
                 withCredentials([sshUserPrivateKey(credentialsId: 'ansible-ssh-key', keyFileVariable: 'SSH_KEY', usernameVariable: 'EC2_USER')]) {
                     script {
                         sh '''
                         ssh -o StrictHostKeyChecking=no -i ${SSH_KEY} ${EC2_USER}@${EC2_HOST} \
-                        "cd /var/www/html && docker-compose up -d"
+                        "cd /var/www/html && docker-compose up -d > docker-compose.log 2>&1 || echo 'Docker Compose failed' > docker-compose.log"
                         '''
                     }
                 }
@@ -81,6 +81,11 @@ pipeline {
                     cat ansible.log
                 else
                     echo "ansible.log file not found."
+                fi
+                if [ -f docker-compose.log ]; then
+                    cat docker-compose.log
+                else
+                    echo "docker-compose.log file not found."
                 fi
                 '''
             }
