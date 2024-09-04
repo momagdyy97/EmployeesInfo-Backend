@@ -48,8 +48,7 @@ pipeline {
                     script {
                         sh '''
                         ssh -o StrictHostKeyChecking=no -i ${SSH_KEY} ${EC2_USER}@${EC2_HOST} \
-                        "ansible-playbook /var/www/html/deploy.yml -i /var/www/html/hosts.ini -u ${EC2_USER} -k -vvvv > ansible.log 2>&1"
-                        cat ansible.log
+                        "ansible-playbook /var/www/html/deploy.yml -i /var/www/html/hosts.ini -u ${EC2_USER} -k -vvvv > ansible.log 2>&1 || echo 'Ansible playbook failed' > ansible.log"
                         '''
                     }
                 }
@@ -64,7 +63,13 @@ pipeline {
         failure {
             script {
                 echo 'CI/CD Pipeline failed.'
-                sh 'cat ansible.log'
+                sh '''
+                if [ -f ansible.log ]; then
+                    cat ansible.log
+                else
+                    echo "ansible.log file not found."
+                fi
+                '''
             }
         }
     }
