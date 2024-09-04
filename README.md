@@ -8,8 +8,6 @@
 
 - RESTful API endpoints for CRUD operations.
   
-- Authentication and authorization using JWT.
-  
 - Database integration with MongoDB.
   
 - Dockerized setup for containerized deployment.
@@ -45,6 +43,7 @@ Create a .env file in the root directory and add the following:
 - The backend service should now be running on http://localhost:3001.
 
 ### 5. Docker Setup
+
 1. Build the Docker image
    
 docker build -t **your-docker-hub-username**/essam-zomool-backend .
