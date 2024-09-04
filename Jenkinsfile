@@ -64,10 +64,10 @@ pipeline {
             steps {
                 script {
                     // Stop and remove any existing containers
-                    sh 'docker-compose down || true'
+                    sh 'cd /var/www/html && docker-compose down || true'
                     
                     // Start the services using Docker Compose
-                    sh 'docker-compose up -d'
+                    sh 'cd /var/www/html && docker-compose up -d'
                 }
             }
         }
