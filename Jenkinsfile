@@ -62,7 +62,10 @@ pipeline {
             echo 'CI/CD Pipeline completed successfully!'
         }
         failure {
-            echo 'CI/CD Pipeline failed.'
+            script {
+                echo 'CI/CD Pipeline failed.'
+                sh 'cat ansible.log'
+            }
         }
     }
 }
