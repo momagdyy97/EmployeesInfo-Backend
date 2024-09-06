@@ -23,8 +23,10 @@ mongoose.connect(process.env.MONGO_URI, {
   useUnifiedTopology: true,
 })
   .then(() => console.log('MongoDB connected successfully'))
-  .catch(err => console.error('MongoDB connection error:', err));
-
+  .catch(err => {
+    console.error('MongoDB connection error:', err);
+    process.exit(1); // Exit the application on connection failure
+});
 // Fallback route for unknown routes
 app.use((req, res, next) => {
   res.status(404).send({ message: 'Route not found' });
