@@ -1,5 +1,5 @@
 const express = require('express');
-const Item = require('../models/Item'); // Ensure the path to your Item model is correct
+const Item = require('../models/Item');
 const router = express.Router();
 
 // Create Item
@@ -13,11 +13,28 @@ router.post('/items', async (req, res) => {
     }
 });
 
-// Read All Items
+// Read All Items with Search, Description Filter, and Pagination
 router.get('/items', async (req, res) => {
     try {
-        const items = await Item.find();
-        res.json(items);
+        const { search, description, page = 1, limit = 10 } = req.query;
+
+        let query = {};
+        if (search) {
+            query.name = { $regex: search, $options: 'i' };
+        }
+        if (description) {
+            query.description = description;
+        }
+
+        const items = await Item.find(query)
+            .skip((page - 1) * limit)
+            .limit(parseInt(limit))
+            .exec();
+
+        const totalItems = await Item.countDocuments(query);
+        const totalPages = Math.ceil(totalItems / limit);
+
+        res.json({ items, totalPages, currentPage: page });
     } catch (err) {
         res.status(500).json({ message: 'Error fetching items' });
     }
