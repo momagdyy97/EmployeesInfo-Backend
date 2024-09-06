@@ -1,0 +1,15 @@
+services:
+  frontend:
+    image: momousa1997/mern-frontend:latest
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - backend
+
+  backend:
+    image: momousa1997/mern-backend:latest
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=production
