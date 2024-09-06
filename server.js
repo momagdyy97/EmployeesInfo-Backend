@@ -10,15 +10,27 @@ app.use(cors());
 app.use(express.json());
 
 // Routes
-const itemsRoutes = require('./routes/items');
-app.use('/api', itemsRoutes);
+try {
+  const itemsRoutes = require('./routes/items');
+  app.use('/api', itemsRoutes);
+} catch (err) {
+  console.error('Error loading routes:', err);
+}
 
 // Connect to MongoDB
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log('MongoDB connected'))
+mongoose.connect(process.env.MONGO_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+  .then(() => console.log('MongoDB connected successfully'))
   .catch(err => console.error('MongoDB connection error:', err));
 
-// Listen on port 3001
+// Fallback route for unknown routes
+app.use((req, res, next) => {
+  res.status(404).send({ message: 'Route not found' });
+});
+
+// Listen on port
 const port = process.env.PORT || 3001;
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
