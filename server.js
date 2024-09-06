@@ -10,14 +10,15 @@ app.use(cors());
 app.use(express.json());
 
 // Routes
-const itemsRoutes = require('./routes/items');
-app.use('/api', itemsRoutes);
+try {
+  const itemsRoutes = require('./routes/items');
+  app.use('/api', itemsRoutes);
+} catch (err) {
+  console.error('Error loading routes:', err.message || err);
+}
 
 // Connect to MongoDB
-mongoose.connect(process.env.MONGO_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-})
+mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('MongoDB connected successfully'))
   .catch(err => {
     console.error('MongoDB connection error:', err.message || err);
@@ -27,12 +28,6 @@ mongoose.connect(process.env.MONGO_URI, {
 // Fallback route for unknown routes
 app.use((req, res, next) => {
   res.status(404).send({ message: 'Route not found' });
-});
-
-// Error handling middleware
-app.use((err, req, res, next) => {
-  console.error('Server error:', err.message || err);
-  res.status(500).send({ message: 'Internal server error' });
 });
 
 // Listen on port
