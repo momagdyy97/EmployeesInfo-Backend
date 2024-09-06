@@ -14,19 +14,17 @@ try {
   const itemsRoutes = require('./routes/items');
   app.use('/api', itemsRoutes);
 } catch (err) {
-  console.error('Error loading routes:', err);
+  console.error('Error loading routes:', err.message || err);
 }
 
 // Connect to MongoDB
-mongoose.connect(process.env.MONGO_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
+mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('MongoDB connected successfully'))
   .catch(err => {
-    console.error('MongoDB connection error:', err);
-    process.exit(1); // Exit the application on connection failure
-});
+    console.error('MongoDB connection error:', err.message || err);
+    process.exit(1); // Exit the application if there's a connection failure
+  });
+
 // Fallback route for unknown routes
 app.use((req, res, next) => {
   res.status(404).send({ message: 'Route not found' });
